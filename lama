@@ -1,0 +1,24 @@
+peers *=.*/max-num-outbound-peers = $max_num_outbound_peers/;\
+s/^max-connections *=.*/max-connections = $max_connections/" $HOME/.celestia-app/config/config.toml
+
+------------------------------------------------
+pruning_keep_recent="100" 
+pruning_interval="10"
+
+------------------------------------------------------
+
+sed -i -e "s/^pruning *=.*/pruning = \"custom\"/;\
+s/^pruning-keep-recent *=.*/pruning-keep-recent = \"$pruning_keep_recent\"/;\
+s/^pruning-interval *=.*/pruning-interval = \"$pruning_interval\"/" $HOME/.celestia-app/config/app.toml
+
+--------------------------------------------
+
+sed -i 's/snapshot-interval *=.*/snapshot-interval = 0/' $HOME/.celestia-app/config/app.toml
+
+---------------------------------------------------
+celestia-appd tendermint unsafe-reset-all --home $HOME/.celestia-app
+
+---------------------------------------------------
+
+celestia-appd config chain-id $CELESTIA_CHAIN
+celestia-appd config keyrin
